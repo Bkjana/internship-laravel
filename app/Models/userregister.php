@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class userregister extends Model
+{
+    use HasFactory;
+    protected $table = "userregister";
+    protected $primarykey = "User_ID";
+    // protected $fillable = ['name','email','password'];
+}
