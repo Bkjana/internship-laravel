@@ -41,7 +41,7 @@ Route::get('/stupersonal/{studentid}',[student_controller::class,'personalView']
 Route::get('/stupersonal',[student_controller::class,'personalSave']);
 Route::get('/stuLogout',[student_controller::class,'logout']);
 
-Route::get('/check',[student_controller::class,'checkRepo']);
+// Route::get('/check',[student_controller::class,'checkRepo']);
 
 Route::get('/db',function(){
     return DB::select('select * from student');

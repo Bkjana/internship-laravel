@@ -13,8 +13,13 @@ class StudentRepoServiceProvide extends ServiceProvider
      *
      * @return void
      */
+
+     /**
+      * binding interface and class here
+      */
     public function register()
     {
+        //
         $this->app->bind(StudentRepoInterface::class,StudentReposistory::class);
     }
 

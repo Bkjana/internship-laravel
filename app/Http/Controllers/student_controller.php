@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\DB;
 class student_controller extends Controller
 {
 
-    private StudentRepoInterface $userRepoInterface;
+    private StudentRepoInterface $studentRepoInterface;
 
-    public function __construct(StudentRepoInterface $userRepoInterface) {
-        $this->userRepoInterface = $userRepoInterface;
+    public function __construct(StudentRepoInterface $studentRepoInterface) {
+        $this->studentRepoInterface = $studentRepoInterface;
     }
 
     public function home()
@@ -46,14 +46,16 @@ class student_controller extends Controller
             'stuconpass' => 'required | same:stupass',
             'stucheck' => 'required'
         ]);
-        $student = new Student;
-        $student->name = $request['stuname'];
-        $student->email = $request['stuemail'];
-        $student->password = $request['stupass'];
-        $student->address = $request['stuadd'];
-        $student->institute = $request['stuinstitute'];
-        $student->instituteaddress = $request['stuInsAdd'];
-        $student->save();
+        // $student = new Student;
+        // $student->name = $request['stuname'];
+        // $student->email = $request['stuemail'];
+        // $student->password = $request['stupass'];
+        // $student->address = $request['stuadd'];
+        // $student->institute = $request['stuinstitute'];
+        // $student->instituteaddress = $request['stuInsAdd'];
+        // $student->save();
+
+        $this->studentRepoInterface->SaveStudentDetails($request);
         return view('student.studentSignin');
     }
 
@@ -66,7 +68,7 @@ class student_controller extends Controller
         ]);
         $email = $request['stuemail'];
         $password = $request['stupass'];
-        $student = Student::where('email', $email)->get();
+        $student = $this->studentRepoInterface->findStudentByEmail($email);
         if (sizeof($student) != 0) {
             // return $student;
             // echo $student;
@@ -88,7 +90,9 @@ class student_controller extends Controller
     public function allstudent()
     {
         if (session()->has('student')) {
-            $stu = Student::with(['getStudentAddresses','getStudentpersonaldetails'])->get();
+            // $stu = Student::with(['getStudentAddresses','getStudentpersonaldetails'])->get();
+
+            $stu=$this->studentRepoInterface->findAllStudent();
 
             // dd($stu[0]->getStudentAddresses);
 
@@ -120,23 +124,25 @@ class student_controller extends Controller
         $request->validate([
             'stuname' => 'required',
         ]);
-        $stu=Student::find($id);
-        $stu->name = $request['stuname'];
-        $stu->address = $request['stuadd'];
-        $stu->institute = $request['stuinstitute'];
-        $stu->instituteaddress = $request['stuInsAdd'];
-        $stu->save();
+        // $stu=Student::find($id);
+        // $stu->name = $request['stuname'];
+        // $stu->address = $request['stuadd'];
+        // $stu->institute = $request['stuinstitute'];
+        // $stu->instituteaddress = $request['stuInsAdd'];
+        // $stu->save();
+        $this->studentRepoInterface->updateStudent($request,$id);
         return redirect("/stuAll");
     }
 
     public function delete($id)
     {
         if (session()->has('student')) {
-            $stu = DB::table('student')->where('studentid', $id)->first();
+            $stu = $this->studentRepoInterface->findStudent($id);
             // echo $stu;
                 if($stu){
                     // echo "hello";
-                    Student::where('studentid',$id)->firstorfail()->delete();
+                    // Student::where('studentid',$id)->firstorfail()->delete();
+                    $this->studentRepoInterface->deleteStudent($id);
                 }
                return redirect("/stuAll");
         } else {
@@ -173,10 +179,10 @@ class student_controller extends Controller
         return redirect("/stusignin");
     }
 
-    public function checkRepo()
-    {
-        dd($this->userRepoInterface->findAllStudent());
-    }
+    // public function checkRepo()
+    // {
+    //     dd($this->studentRepoInterface->findAllStudent());
+    // }
 
 }
 
