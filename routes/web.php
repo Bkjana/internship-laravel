@@ -3,7 +3,6 @@
 use App\Http\Controllers\Form;
 use App\Http\Controllers\student_controller;
 use App\Http\Controllers\User_Controller;
-use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
